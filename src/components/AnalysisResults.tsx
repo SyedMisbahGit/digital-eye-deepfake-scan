@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle, XCircle, Clock, Eye, Zap, Database, AlertTriangle, Info } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Eye, Zap, Database, AlertTriangle, Info, Brain } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -51,10 +51,10 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
               </CardTitle>
               <div className="flex items-center space-x-2">
                 <Badge className={getConfidenceBadgeColor(result.confidence, result.isDeepfake)}>
-                  {result.isDeepfake ? 'Deepfake Detected' : 'Authentic'}
+                  {result.isDeepfake ? 'Potential Deepfake' : 'Likely Authentic'}
                 </Badge>
-                <Badge variant="outline" className="text-blue-400 border-blue-400">
-                  DEMO
+                <Badge variant="outline" className="text-green-400 border-green-400">
+                  AI POWERED
                 </Badge>
                 <span className="text-xs text-slate-400">
                   {formatTimestamp(result.timestamp)}
@@ -64,14 +64,14 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
           </CardHeader>
           
           <CardContent className="space-y-6">
-            {/* Demo Notice */}
-            <div className="p-3 bg-blue-900/20 border border-blue-700/50 rounded-lg">
+            {/* AI Analysis Notice */}
+            <div className="p-3 bg-green-900/20 border border-green-700/50 rounded-lg">
               <div className="flex items-start space-x-2">
-                <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                <Brain className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-blue-300 font-medium mb-1">Demo Result</p>
-                  <p className="text-xs text-blue-200">
-                    This is a simulated result. Real deepfake detection would require sophisticated AI models and APIs.
+                  <p className="text-xs text-green-300 font-medium mb-1">Real AI Analysis</p>
+                  <p className="text-xs text-green-200">
+                    Analyzed using Microsoft ResNet-50 computer vision model. Results based on image classification patterns and heuristic analysis.
                   </p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
             <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
               <div>
                 <h3 className="text-lg font-semibold text-white mb-1">
-                  Confidence Score
+                  AI Confidence Score
                 </h3>
                 <p className="text-sm text-slate-400">
                   Analysis completed in {result.analysisTime.toFixed(1)}s
@@ -113,7 +113,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
               <div className="space-y-3">
                 <h4 className="text-white font-medium flex items-center">
                   <AlertTriangle className="h-4 w-4 mr-2 text-yellow-400" />
-                  Detection Metrics
+                  AI Detection Metrics
                 </h4>
                 
                 <div className="space-y-3">
@@ -177,25 +177,25 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
                     <span className="text-slate-400">{result.analysisTime.toFixed(1)}s</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-300">AI Model Version:</span>
-                    <span className="text-slate-400">Demo v1.0</span>
+                    <span className="text-slate-300">AI Model:</span>
+                    <span className="text-slate-400">ResNet-50</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-300">Mode:</span>
-                    <span className="text-slate-400">Simulation</span>
+                    <span className="text-slate-300">Compute:</span>
+                    <span className="text-slate-400">Browser WebGPU/CPU</span>
                   </div>
                 </div>
 
-                {/* Warning/Recommendation */}
+                {/* AI Disclaimer */}
                 <div className="mt-4 p-3 bg-slate-700/40 rounded-lg">
                   <div className="flex items-start space-x-2">
-                    <Zap className="h-4 w-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+                    <Zap className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-slate-300 font-medium mb-1">
-                        Demo Note
+                        AI Analysis Note
                       </p>
                       <p className="text-xs text-slate-400">
-                        This is a simulated result for demonstration purposes. Real deepfake detection requires advanced AI models and substantial computational resources.
+                        This analysis uses a general computer vision model adapted for deepfake detection. Specialized models trained specifically on synthetic media would provide more accurate results.
                       </p>
                     </div>
                   </div>
