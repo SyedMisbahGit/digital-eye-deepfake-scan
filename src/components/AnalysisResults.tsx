@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle, XCircle, Clock, Eye, Zap, Database, AlertTriangle } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Eye, Zap, Database, AlertTriangle, Info } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -53,6 +53,9 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
                 <Badge className={getConfidenceBadgeColor(result.confidence, result.isDeepfake)}>
                   {result.isDeepfake ? 'Deepfake Detected' : 'Authentic'}
                 </Badge>
+                <Badge variant="outline" className="text-blue-400 border-blue-400">
+                  DEMO
+                </Badge>
                 <span className="text-xs text-slate-400">
                   {formatTimestamp(result.timestamp)}
                 </span>
@@ -61,6 +64,19 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
           </CardHeader>
           
           <CardContent className="space-y-6">
+            {/* Demo Notice */}
+            <div className="p-3 bg-blue-900/20 border border-blue-700/50 rounded-lg">
+              <div className="flex items-start space-x-2">
+                <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-xs text-blue-300 font-medium mb-1">Demo Result</p>
+                  <p className="text-xs text-blue-200">
+                    This is a simulated result. Real deepfake detection would require sophisticated AI models and APIs.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Main Result */}
             <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
               <div>
@@ -162,11 +178,11 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-300">AI Model Version:</span>
-                    <span className="text-slate-400">v2.1.3</span>
+                    <span className="text-slate-400">Demo v1.0</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-300">Resolution Quality:</span>
-                    <span className="text-slate-400">High</span>
+                    <span className="text-slate-300">Mode:</span>
+                    <span className="text-slate-400">Simulation</span>
                   </div>
                 </div>
 
@@ -176,13 +192,10 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results }) => {
                     <Zap className="h-4 w-4 text-yellow-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-slate-300 font-medium mb-1">
-                        {result.isDeepfake ? 'Recommendation' : 'Note'}
+                        Demo Note
                       </p>
                       <p className="text-xs text-slate-400">
-                        {result.isDeepfake 
-                          ? 'Exercise caution. This content shows signs of digital manipulation.'
-                          : 'Content appears authentic, but always verify from multiple sources.'
-                        }
+                        This is a simulated result for demonstration purposes. Real deepfake detection requires advanced AI models and substantial computational resources.
                       </p>
                     </div>
                   </div>
