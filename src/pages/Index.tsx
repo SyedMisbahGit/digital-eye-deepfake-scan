@@ -96,7 +96,7 @@ const Index = () => {
         analysisResult = await analyzeVideo(data.file);
       } else if (type === 'social') {
         setAnalysisStatus('Analyzing social media content...');
-        analysisResult = await analyzeSocialMediaMonitoring(data.url);
+        analysisResult = await analyzeSocialMediaMonitoring(data.url, data.platforms || ['twitter', 'instagram']);
       } else if (type === 'telegram') {
         setAnalysisStatus('Running bot detection algorithms...');
         analysisResult = await analyzeTelegramBot(data.username);
