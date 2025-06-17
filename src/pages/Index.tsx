@@ -13,7 +13,7 @@ import TelegramBotAnalyzer from '@/components/TelegramBotAnalyzer';
 import TwitterBotAnalyzer from '@/components/TwitterBotAnalyzer';
 import InstagramBotAnalyzer from '@/components/InstagramBotAnalyzer';
 import SocialMediaMonitor from '@/components/SocialMediaMonitor';
-import { analyzeImage, analyzeVideo, analyzeSocialMedia, analyzeTelegramBot, analyzeTwitterBot, analyzeInstagramBot, analyzeSocialMediaMonitoring } from '@/utils/deepfakeDetection';
+import { analyzeImage, analyzeVideo, analyzeTelegramBot, analyzeTwitterBot, analyzeInstagramBot, analyzeSocialMediaMonitoring } from '@/utils/deepfakeDetection';
 
 export interface AnalysisResult {
   id: string;
@@ -96,7 +96,7 @@ const Index = () => {
         analysisResult = await analyzeVideo(data.file);
       } else if (type === 'social') {
         setAnalysisStatus('Analyzing social media content...');
-        analysisResult = await analyzeSocialMedia(data.url);
+        analysisResult = await analyzeSocialMediaMonitoring(data.url);
       } else if (type === 'telegram') {
         setAnalysisStatus('Running bot detection algorithms...');
         analysisResult = await analyzeTelegramBot(data.username);
