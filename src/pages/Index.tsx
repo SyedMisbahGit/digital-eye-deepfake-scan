@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Upload, Link, Shield, AlertTriangle, CheckCircle, XCircle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,22 +9,30 @@ import ImageUpload from '@/components/ImageUpload';
 import VideoUpload from '@/components/VideoUpload';
 import SocialLinkAnalyzer from '@/components/SocialLinkAnalyzer';
 import AnalysisResults from '@/components/AnalysisResults';
-import { analyzeImage, analyzeVideo, analyzeSocialMedia } from '@/utils/deepfakeDetection';
+import TelegramBotAnalyzer from '@/components/TelegramBotAnalyzer';
+import { analyzeImage, analyzeVideo, analyzeSocialMedia, analyzeTelegramBot } from '@/utils/deepfakeDetection';
 
 export interface AnalysisResult {
   id: string;
-  type: 'image' | 'video' | 'social';
+  type: 'image' | 'video' | 'social' | 'telegram';
   fileName?: string;
   url?: string;
+  username?: string;
   confidence: number;
-  isDeepfake: boolean;
+  isDeepfake?: boolean;
+  isBot?: boolean;
   analysisTime: number;
   details: {
-    faceDetection: number;
+    faceDetection?: number;
     temporalConsistency?: number;
-    artifactDetection: number;
-    metadataAnalysis: number;
+    artifactDetection?: number;
+    metadataAnalysis?: number;
+    aiModelConfidence?: number;
+    patternAnalysis?: number;
+    linguisticAnalysis?: number;
+    structureAnalysis?: number;
   };
+  reasons?: string[];
   timestamp: Date;
 }
 
@@ -39,7 +46,7 @@ const Index = () => {
     setResults(prev => [result, ...prev]);
   };
 
-  const handleAnalysis = async (type: 'image' | 'video' | 'social', data: any) => {
+  const handleAnalysis = async (type: 'image' | 'video' | 'social' | 'telegram', data: any) => {
     setIsAnalyzing(true);
     setAnalysisProgress(0);
     setAnalysisStatus('Initializing AI models...');
@@ -47,7 +54,6 @@ const Index = () => {
     const startTime = Date.now();
 
     try {
-      // Progress simulation for UI feedback
       const progressInterval = setInterval(() => {
         setAnalysisProgress(prev => {
           if (prev >= 90) {
@@ -66,9 +72,12 @@ const Index = () => {
       } else if (type === 'video') {
         setAnalysisStatus('Extracting video frames...');
         analysisResult = await analyzeVideo(data.file);
-      } else {
+      } else if (type === 'social') {
         setAnalysisStatus('Analyzing social media content...');
         analysisResult = await analyzeSocialMedia(data.url);
+      } else if (type === 'telegram') {
+        setAnalysisStatus('Running bot detection algorithms...');
+        analysisResult = await analyzeTelegramBot(data.username);
       }
 
       clearInterval(progressInterval);
@@ -82,10 +91,13 @@ const Index = () => {
         type,
         fileName: data.fileName,
         url: data.url,
+        username: data.username,
         confidence: analysisResult.confidence,
         isDeepfake: analysisResult.isDeepfake,
+        isBot: analysisResult.isBot,
         analysisTime,
         details: analysisResult.details,
+        reasons: analysisResult.reasons,
         timestamp: new Date()
       };
 
@@ -115,11 +127,11 @@ const Index = () => {
           <div className="flex items-center justify-center mb-4">
             <Shield className="h-12 w-12 text-blue-400 mr-3" />
             <h1 className="text-4xl font-bold text-white">DeepGuard AI</h1>
-            <Badge className="ml-3 bg-green-600 text-green-100">LIVE AI</Badge>
+            <Badge className="ml-3 bg-green-600 text-green-100">REAL AI</Badge>
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-4">
-            Advanced deepfake detection powered by real AI models running in your browser. 
-            Upload images, videos, or analyze social media content for authenticity verification.
+            Advanced AI-powered content analysis with real machine learning models running in your browser. 
+            Detect deepfakes, analyze social media, and identify Telegram bots.
           </p>
           
           {/* AI Notice */}
@@ -130,10 +142,10 @@ const Index = () => {
                 <div className="text-left">
                   <h3 className="text-green-300 font-semibold mb-2">Real AI Analysis</h3>
                   <p className="text-green-200 text-sm mb-2">
-                    This application uses Microsoft's ResNet-50 computer vision model running directly in your browser via WebGPU/CPU.
+                    This application uses Google's Vision Transformer (ViT) and RoBERTa models running directly in your browser via WebGPU/CPU.
                   </p>
                   <p className="text-green-200 text-sm">
-                    <strong>Note:</strong> While using real AI, this is adapted from general image classification and may not be as accurate as specialized deepfake detection models.
+                    <strong>Features:</strong> Advanced deepfake detection, social media analysis, and AI-powered Telegram bot detection - all without APIs.
                   </p>
                 </div>
               </div>
@@ -169,7 +181,7 @@ const Index = () => {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="image" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-slate-700/50">
+              <TabsList className="grid w-full grid-cols-4 bg-slate-700/50">
                 <TabsTrigger value="image" className="text-white data-[state=active]:bg-blue-600">
                   Image Upload
                 </TabsTrigger>
@@ -178,6 +190,9 @@ const Index = () => {
                 </TabsTrigger>
                 <TabsTrigger value="social" className="text-white data-[state=active]:bg-blue-600">
                   Social Media
+                </TabsTrigger>
+                <TabsTrigger value="telegram" className="text-white data-[state=active]:bg-blue-600">
+                  Telegram Bot
                 </TabsTrigger>
               </TabsList>
               
@@ -191,6 +206,10 @@ const Index = () => {
               
               <TabsContent value="social" className="mt-6">
                 <SocialLinkAnalyzer onAnalyze={handleAnalysis} disabled={isAnalyzing} />
+              </TabsContent>
+
+              <TabsContent value="telegram" className="mt-6">
+                <TelegramBotAnalyzer onAnalyze={handleAnalysis} disabled={isAnalyzing} />
               </TabsContent>
             </Tabs>
           </CardContent>
@@ -213,7 +232,7 @@ const Index = () => {
               <div className="text-center text-gray-400">
                 <Shield className="h-16 w-16 mx-auto mb-4 text-slate-600" />
                 <p className="text-lg">No analysis results yet</p>
-                <p className="text-sm">Upload content above to begin AI-powered deepfake detection</p>
+                <p className="text-sm">Upload content or analyze usernames above to begin AI-powered detection</p>
               </div>
             </CardContent>
           </Card>
